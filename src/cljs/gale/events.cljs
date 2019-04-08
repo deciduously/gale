@@ -9,3 +9,8 @@
  ::initialize-db
  (fn-traced [_ _]
    db/default-db))
+
+(re-frame/reg-event-db
+  ::update-str
+  (fn-traced [db [_ new-str]]
+    (assoc db :input-str new-str)))
