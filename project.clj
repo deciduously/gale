@@ -2,7 +2,9 @@
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.clojure/clojurescript "1.10.520"]
                  [reagent "0.8.1"]
-                 [re-frame "0.10.6"]]
+                 [re-frame "0.10.6"]
+                 [dorothy "0.0.7"]
+                 [viz-cljc "0.1.3"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]]
 
@@ -23,8 +25,7 @@
                    [day8.re-frame/re-frame-10x "0.3.7-react16"]
                    [day8.re-frame/tracing "0.5.1"]
                    [figwheel-sidecar "0.5.16"]
-                   [cider/piggieback "0.3.5"]
-		   [dorothy "0.0.7"]]
+                   [cider/piggieback "0.3.5"]]
 
     :plugins      [[lein-figwheel "0.5.18"]
                    [lein-doo "0.1.8"]]}

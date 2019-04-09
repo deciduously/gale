@@ -10,9 +10,9 @@
     (fn []
       [:textarea {:value @input-str :on-change #(re-frame/dispatch [::events/update-str (-> % .-target .-value)])}])))
 
+; this will get handled by an effect
 (defn output-panel []
-  (let [output-str @(re-frame/subscribe [::subs/output-str])]
-    [:div output-str])) 
+    [:div#output-svg])
 
 (defn main-panel []
   [:div
