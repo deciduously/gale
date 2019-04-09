@@ -5,9 +5,17 @@
    [gale.subs :as subs]
    ))
 
+(defn input-panel []
+  (let [input-str (re-frame/subscribe [::subs/input-str])]
+    (fn []
+      [:textarea {:value @input-str :on-change #(re-frame/dispatch [::events/update-str (-> % .-target .-value)])}])))
+
+(defn output-panel []
+  (let [output-str @(re-frame/subscribe [::subs/output-str])]
+    [:div output-str])) 
+
 (defn main-panel []
-  (let [input-str @(re-frame/subscribe [::subs/input-str])]
-    [:div
-     [:h1 "Current str " input-str]
-     [:textarea {:value input-str :on-change #(re-frame/dispatch [::events/update-str (-> % .-target .-value)])}]
-     ]))
+  [:div
+   [:h1 "Gale"]
+   [input-panel]
+   [output-panel]])
