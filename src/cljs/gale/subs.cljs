@@ -1,4 +1,4 @@
-vi(ns gale.subs
+(ns gale.subs
   (:require
    [re-frame.core :as re-frame]
    [dorothy.core :as dot]
@@ -11,8 +11,12 @@ vi(ns gale.subs
 
 (re-frame/reg-sub
  ::output-svg
- (fn [db]
+ (fn [_]
    (try
-     (-> @(re-frame/subscribe [::input-str]) dot/graph dot/dot viz/image)
+     (-> @(re-frame/subscribe [::input-str])
+         (cljs.reader/read-string)
+         (dot/graph)
+         (dot/dot)
+         (viz/image))
      (catch :default e
        (str "Invalid dot input: " e)))))

@@ -14,8 +14,15 @@
 (defn output-panel []
     [:div#output-svg])
 
+(defn svg-string []
+  (let [output-str (re-frame/subscribe [::subs/output-svg])]
+    (fn []
+      [:div @output-str])))
+
 (defn main-panel []
   [:div
    [:h1 "Gale"]
    [input-panel]
-   [output-panel]])
+   [svg-string]
+   [output-panel]
+   ])

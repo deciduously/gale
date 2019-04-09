@@ -13,22 +13,20 @@
  (fn-traced [_ _]
    db/default-db))
 
+(re-frame/reg-event-fx
+  ::update-str
+  (fn-traced [cofx [_ new-str]]
+             {:db (assoc (:db cofx) :input-str new-str)
+              :update-svg '()}))
+
 (re-frame/reg-fx
  :update-svg
  (fn-traced [_]
-            (-> js/document
-                (.getElementById "output-svg")
-                (.-innerHtml)
-                (set! (-> (re-frame/subscribe [::subs/input-str])
-                          (dot/graph)
-                          (dot/dot)
-                          (viz/image))))
-            {}))
-
-(re-frame/reg-event-fx
-  ::update-str
-  (fn-traced [_ [_ new-str]]
-             {:db (assoc db :input-str new-str)
-              :update-svg}))
-
-
+            (let [g-svg (try (-> @(re-frame/subscribe [::subs/input-str])
+                              (cljs.reader/read-string)
+                              (dot/graph)
+                              (dot/dot)
+                              (viz/image))
+                             (catch js/Error e
+                               ("ERROR " e))]
+                  (set! (.-innerHtml (.querySelector js/document "#output-svg")) g-svg)))))
