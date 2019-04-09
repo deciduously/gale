@@ -8,6 +8,18 @@
    [viz.core :as viz]
    ))
 
+(re-frame/reg-fx
+ :update-svg
+ (fn-traced [new-str]
+            (let [g-svg (try (-> new-str
+                                 (cljs.reader/read-string)
+                                 (dot/graph)
+                                 (dot/dot)
+                                 (viz/image))
+                            (catch js/Error e
+                               ("ERROR " e))]
+                  (set! (.-innerHtml (.querySelector js/document "#output-svg")) g-svg)))))
+
 (re-frame/reg-event-db
  ::initialize-db
  (fn-traced [_ _]
@@ -17,16 +29,5 @@
   ::update-str
   (fn-traced [cofx [_ new-str]]
              {:db (assoc (:db cofx) :input-str new-str)
-              :update-svg '()}))
+              :update-svg new-str}))
 
-(re-frame/reg-fx
- :update-svg
- (fn-traced [_]
-            (let [g-svg (try (-> @(re-frame/subscribe [::subs/input-str])
-                              (cljs.reader/read-string)
-                              (dot/graph)
-                              (dot/dot)
-                              (viz/image))
-                             (catch js/Error e
-                               ("ERROR " e))]
-                  (set! (.-innerHtml (.querySelector js/document "#output-svg")) g-svg)))))
